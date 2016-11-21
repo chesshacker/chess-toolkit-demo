@@ -1,0 +1,7 @@
+<% if error_string %>
+    $('flash').html(<%=error_string%>)
+    controller.board.drawPosition();
+<% else %>
+    $('flash').html(<%= raw("made move #{move_string}") %>)
+    controller.game.addMove(<%= raw("#{fen}, #{san}" %>);
+<% end %>

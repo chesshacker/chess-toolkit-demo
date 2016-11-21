@@ -1,0 +1,30 @@
+<% if @position %>
+  <div class="panel">
+    <%= @position.comment ? @position.comment : raw("&nbsp;") %>
+    <table>
+      <%  if @position.total > 0 %>
+        <tr><td>score:</td><td><%= "#{@position.score}" %></td></tr>
+        <tr><td>games:</td><td><%= "#{number_with_delimiter(@position.total)}" %></td></tr>
+      <% end %>
+    </table>
+  </div>
+  <% if @position.moves.length > 0 %>
+    <table class="table table-striped">
+      <tr>
+        <th>move</th>
+        <th align="right">popularity</th>
+        <th align="right">score</th>
+        <th class="hidden-sm">name</th>
+      </tr>
+      <% @position.moves_sorted.each do |move| 
+            position = move.position %>
+        <tr>
+          <td><%= link_to_send_move move.san %></td>
+          <td align="center"><%= number_to_percentage(100.0 * move.total / @position.total, :precision => 0) %></td>
+          <td align="center"><%= position.score - @position.score %></td>
+          <td class="hidden-sm"><%= position.comment %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+<% end %>

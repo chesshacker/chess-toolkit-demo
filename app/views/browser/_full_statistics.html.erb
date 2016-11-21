@@ -1,0 +1,43 @@
+<p><%= @fen %></p>
+<% if @position %>
+    <p><%= @position.comment %>
+        <%  if @position.total > 0 %>
+            <br><%= "#{number_to_percentage(@position.white_percent, :precision => 1)} - #{number_to_percentage(@position.draw_percent, :precision => 1)} - #{number_to_percentage(@position.black_percent, :precision => 1)} - #{number_with_delimiter(@position.total)}" %><br>
+            score: <%= "#{@position.score}, theory: #{@position.score_theoretical}, best white: #{@position.score_white_best}, best black: #{@position.score_black_best}, white elo: #{@position.white_elo}, black elo: #{@position.black_elo}" %>
+        <% end %>
+    </p>
+    <% if @position.moves.length > 0 %>
+        <table>
+            <tr>
+                <td>move</td>
+                <td align="right" style="padding-left:10px">popularity</td>
+                <td align="right" style="padding-left:10px">theory</td>
+                <td align="right" style="padding-left:10px">practical</td>
+                <td align="right" style="padding-left:10px">score</td>
+                <td align="right" style="padding-left:10px">strong</td>
+                <td align="right" style="padding-left:10px">sharp</td>
+                <td align="right" style="padding-left:10px">rating</td>
+                <td style="padding-left:10px">name</td>
+            </tr>
+            <% @position.moves_sorted.each do |move| 
+                position = move.position %>
+                <tr>
+                    <td><%= link_to_function(move.san, "controller.sendMove('#{move.san}'); return false;") %></td>
+                    <td align="right"><%= number_to_percentage(100.0 * move.total / @position.total, :precision => 1) %></td>
+                    <td align="right"><%= position.score_theoretical - @position.score_theoretical %></td>
+                    <td align="right"><%= @is_white_to_move ? position.score_white_best - @position.score_white_best : position.score_black_best - @position.score_black_best %></td>
+                    <td align="right"><%= position.score - @position.score %></td>
+                    <% if @prev_strength && position.total > 0 %>
+                        <td align="right"><%= number_with_precision(position.strength(@is_white_to_move) - @prev_strength ) %></td>
+                        <td align="right"><%= number_with_precision(position.sharpness(@is_white_to_move) - @prev_sharpness ) %></td>
+                    <% else %>
+                        <td align="right">-</td>
+                        <td align="right">-</td>
+                    <% end %>
+                    <td align="right"><%= @is_white_to_move ? position.white_elo - @position.white_elo : position.black_elo - @position.black_elo %></td>
+                    <td style="padding-left:10px"><%= position.comment %></td>
+                </tr>
+            <% end %>
+        </table>
+    <% end %>
+<% end %>

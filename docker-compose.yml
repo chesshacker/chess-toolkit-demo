@@ -1,12 +1,19 @@
 version: '2'
 services:
-  # db:
-  #   image: mysql
   web:
     build: .
     volumes:
       - .:/usr/src/app
     ports:
       - "3000:3000"
-    # depends_on:
-    #   - db
+    links:
+      - db
+  db:
+    image: mysql
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: sample_chess_api
+      MYSQL_DATABASE: sample_chess_api
+      MYSQL_USER: sample_chess_api
+      MYSQL_PASSWORD: sample_chess_api

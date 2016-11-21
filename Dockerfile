@@ -12,4 +12,4 @@ RUN cd /usr/src && \
 ADD Gemfile /usr/src/app/Gemfile
 ADD Gemfile.lock /usr/src/app/Gemfile.lock
 RUN bundle install
-CMD ./bin/rails s -p 3000 -b 0.0.0.0
+CMD ./bin/start

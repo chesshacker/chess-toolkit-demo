@@ -1,0 +1,52 @@
+body {
+    padding-top: 70px;
+}
+#footer {
+	height: 30px;
+}
+iframe {
+    border: 0px;
+}
+h3:before,h4:before {
+    display:block; 
+    content:""; 
+    height:50px; 
+    margin:-50px 0 0; 
+}
+#board {
+	position: relative;
+}
+#moveList {
+    min-height: 3em;
+}
+#moveList a {
+    white-space: nowrap;
+}
+#moveList .lastMove a {
+    color: red;
+}
+.lightSquare {
+	background-color: #C4E4FF;
+}
+.darkSquare {
+	background-color: #428BCA;
+}
+.lightSquare, .darkSquare {
+	z-index: 10;
+}
+.fileLabel, .rankLabel {
+    vertical-align: middle;
+    text-align: center;
+    color: black;
+    padding: 0px;
+	position: absolute;
+}
+.rankLabel {
+	left: 0px;
+}
+.piece {
+	z-index: 20;
+}
+.draggable {
+    cursor: move;
+}
