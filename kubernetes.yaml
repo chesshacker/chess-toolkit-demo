@@ -10,7 +10,7 @@ spec:
         app: sample-chess-api
     spec:
       containers:
-        - image: us.gcr.io/ortizaggies-sample-chess-api/web:8
+        - image: us.gcr.io/ortizaggies-sample-chess-api/web:9
           name: web
           ports:
             - containerPort: 3000
