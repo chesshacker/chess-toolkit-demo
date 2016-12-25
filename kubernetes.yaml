@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sample-chess-api-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sample-chess-api
+    spec:
+      containers:
+        - image: us.gcr.io/ortizaggies-sample-chess-api/web:8
+          name: web
+          ports:
+            - containerPort: 3000
+              name: web
+          env:
+            - name: RAILS_ENV
+              value: production
+            - name: DATABASE_HOST
+              value: 127.0.0.1
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: rails
+                  key: SECRET_KEY_BASE
+        - image: b.gcr.io/cloudsql-docker/gce-proxy:1.05
+          name: cloudsql-proxy
+          command: ["/cloud_sql_proxy", "--dir=/cloudsql",
+                    "-instances=ortizaggies-sample-chess-api:us-central1:mysql=tcp:3306",
+                    "-credential_file=/secrets/cloudsql/credentials.json"]
+          volumeMounts:
+            - name: cloudsql-oauth-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs
+            - name: cloudsql
+              mountPath: /cloudsql
+      volumes:
+        - name: cloudsql-oauth-credentials
+          secret:
+            secretName: cloudsql-oauth-credentials
+        - name: ssl-certs
+          hostPath:
+            path: /etc/ssl/certs
+        - name: cloudsql
+          emptyDir:
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-chess-api-service
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: sample-chess-api
+  type: LoadBalancer

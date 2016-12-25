@@ -49,4 +49,4 @@ test:
 #
 production:
   <<: *default
-#  password: <%= ENV['SAMPLE_CHESS_API_DATABASE_PASSWORD'] %>
+  host: <%= ENV['DATABASE_HOST'] %>

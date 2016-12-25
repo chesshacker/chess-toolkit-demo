@@ -2,8 +2,13 @@ version: '2'
 services:
   web:
     build: .
+    # to simulate production, comment out volumes and uncomment environment
     volumes:
-      - .:/usr/src/app
+      - ./rails:/usr/src/app
+    # environment:
+    #   RAILS_ENV: production
+    #   SECRET_KEY_BASE: 7359f04cd9449df452291af42621da7ccd1add791723ee92a018c14ce39343c5a73f876c284852683acf3ca77ce09943d58e4b5e20bdbab0dd8ba6146962ed4c
+    #   DATABASE_HOST: db
     ports:
       - "3000:3000"
     links:
