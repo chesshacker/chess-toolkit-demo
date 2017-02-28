@@ -1,0 +1,18 @@
+sudo yum update -y
+sudo yum install -y docker git
+sudo service docker start
+sudo chkconfig docker on
+sudo usermod -a -G docker ec2-user
+exit
+docker info
+git clone https://github.com/chesshacker/chess-toolkit-demo.git
+sudo su -
+curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+exit
+echo "alias dc=docker-compose" >> ~/.bashrc
+alias dc=docker-compose
+docker run --rm steveortiz/chesstoolkitdemo:latest rake secret
+echo "export SECRET_KEY_BASE=<secret from above>" >> ~/.bash_profile
+source ~/.bash_profile
+dc -f docker-compose-production.yml up -d
